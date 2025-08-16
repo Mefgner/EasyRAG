@@ -1,0 +1,5 @@
+Environment Setup
+1. Install Python 3.11+ and create a virtual environment (venv).
+2. Install dependencies via requirements.txt.
+3. Use Docker Compose to spin up Qdrant or Postgres+pgvector.
+4. Test local LLM integration (e.g., llama.cpp).

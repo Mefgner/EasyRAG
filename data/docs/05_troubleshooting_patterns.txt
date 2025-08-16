@@ -1,0 +1,5 @@
+Troubleshooting Patterns
+Typical issues in RAG systems:
+- Poor retrieval quality → check embeddings or chunking strategy.
+- High latency → enable batching, quantization, GPU acceleration.
+- Mismatched context → reranker or hybrid retrieval helps.

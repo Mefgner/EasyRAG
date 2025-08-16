@@ -1,0 +1,4 @@
+Vector Stores: Qdrant and pgvector
+Vector databases store and search embeddings. Popular options:
+- Qdrant: optimized for fast similarity search, with filters and payloads.
+- pgvector: PostgreSQL extension for vector search. Good for small/medium projects where SQL integration matters.

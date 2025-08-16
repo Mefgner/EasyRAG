@@ -1,0 +1,7 @@
+Rerankers and Evaluation
+Rerankers improve retrieval results by reordering candidates with a stronger model (e.g., cross-encoder).
+Evaluation metrics for RAG include:
+- precision@k
+- nDCG@k
+- recall@k
+- latency (p95)

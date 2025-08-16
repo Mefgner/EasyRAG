@@ -1,0 +1,4 @@
+Embeddings
+Embeddings are vector representations of text. They capture semantic meaning in a high-dimensional space, allowing
+similar texts to be compared by distance metrics (cosine similarity, dot product, etc.). Embeddings are critical for
+retrieval in RAG systems.

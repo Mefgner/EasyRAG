@@ -1,0 +1,26 @@
+services:
+  qdrant:
+    image: "qdrant/qdrant:latest"
+    ports: ["6333:6333"]
+    volumes: [qdrant_storage:/qdrant/storage]
+    environment:
+      - QDRANT__STORAGE__USE_MMAP=false
+
+  llama:
+    image: "ghcr.io/ggerganov/llama.cpp:server"
+    command: >
+      --model /models/Qwen3-4B-it.gguf
+      --port 8080
+      --n-gpu-layers 40
+    ports: ["8080:8080"]
+    volumes: ["./models:/models"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    runtime: nvidia
+
+volumes:
+  qdrant_storage:
+    driver: local

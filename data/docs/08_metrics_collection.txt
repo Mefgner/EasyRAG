@@ -1,0 +1,7 @@
+Metrics Collection
+Track:
+- precision@k
+- recall@k
+- latency (p95)
+- throughput (requests/sec)
+Store results in a table and visualize with graphs for improvements over time.

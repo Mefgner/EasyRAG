@@ -1,0 +1,4 @@
+RAG Basics
+Retrieval-Augmented Generation (RAG) is an approach that combines a retriever (vector database or search engine)
+with a generator (large language model). The retriever provides relevant context from a knowledge base, and the model
+uses it to generate a more accurate and grounded response.

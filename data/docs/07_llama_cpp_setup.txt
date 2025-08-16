@@ -1,0 +1,6 @@
+Llama.cpp Setup
+1. Clone the llama.cpp repository.
+2. Build with CMake.
+3. Run a quantized 3B or 7B model locally.
+4. Test inference speed and GPU offloading.
+5. Expose via server or bindings for integration with RAG.

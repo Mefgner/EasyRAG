@@ -1,0 +1,6 @@
+FastAPI Deployment
+1. Wrap the RAG pipeline in a FastAPI app.
+2. Define clear request/response contracts.
+3. Build a simple frontend (React/Vue).
+4. Deploy with Docker on a free hosting platform.
+5. Provide public URL and documentation.
