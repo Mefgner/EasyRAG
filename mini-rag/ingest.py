@@ -3,9 +3,9 @@ from qdrant_client.http.models import (Distance, PointStruct, VectorParams)
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
 import uuid
+import tools
 
-embeder = SentenceTransformer("all-MiniLM-L6-v2")
-DIM = embeder.get_sentence_embedding_dimension()
+DIM = tools.embeder.get_sentence_embedding_dimension()
 NORMALIZE = False
 
 DISTANCE = Distance.COSINE
@@ -28,12 +28,8 @@ if not qdc.collection_exists(QDRANT_COLLECTION):
     # - make better chunking with overlapping
     # - add chunk id or chunk order when working with big documents/paragraphs
     # - add metadata like lang
-def embed(text: str):
-    return embeder.encode(text, normalize_embeddings=NORMALIZE).tolist()
-
-
 def add_embedding(text: str, file_name: str):
-    vector = embed(text)
+    vector = tools.embed(text)
     
     point = PointStruct(
         id=str(uuid.uuid4()),
