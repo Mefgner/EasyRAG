@@ -30,6 +30,6 @@ while True:
     user_input = input("You: ")
     if user_input.lower() == "exit":
         break
-    context = query.query(user_input)
+    context, _ = query.query(user_input)
     response = ask_question(user_input, str(context.values()))
     print("AI:", response)
