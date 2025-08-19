@@ -12,13 +12,22 @@ test_cases = [
     {"input": "How to deploy it with FastAPI?", "suggested_files": ["10_fastapi_deploy.txt",]},
 ]
 
+
+def count_intersections(arr1, arr2):
+    counter = 0
+    for item1 in arr1:
+        for item2 in arr2:
+            if item1 == item2:
+                counter+=1
+    return counter
+
+
 for case in test_cases:
     _, scores = query.query(case["input"])
 
     print(f'scores for "{case["input"]}": {str(scores)}', end='\n\n')
     
-    precision = len(set(scores.values()) & set(case["suggested_files"]))
-    
+    precision = count_intersections(scores.values(), case["suggested_files"])
     is_hit = precision >= 1
     
     print(f'Hit@5 for "{case["input"]}": {is_hit}')
