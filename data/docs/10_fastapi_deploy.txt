@@ -1,6 +1,43 @@
-FastAPI Deployment
-1. Wrap the RAG pipeline in a FastAPI app.
-2. Define clear request/response contracts.
-3. Build a simple frontend (React/Vue).
-4. Deploy with Docker on a free hosting platform.
-5. Provide public URL and documentation.
+[FILE: 10_fastapi_deploy.txt]
+TITLE: FastAPI deployment — minimal API for RAG
+SUMMARY: A tiny FastAPI wrapper exposing /retrieve and /ask; plus a Dockerfile sketch.
+KEYWORDS: FastAPI, Uvicorn, Docker, healthcheck, retrieve endpoint, ask endpoint, CORS
+
+FastAPI skeleton:
+```python
+from fastapi import FastAPI
+from pydantic import BaseModel
+app = FastAPI()
+
+class Q(BaseModel):
+    query: str
+
+@app.get("/health")
+def health(): return {"ok": True}
+
+@app.post("/retrieve")
+def retrieve(q: Q):
+    # 1) embed query; 2) vector search k=50; 3) optional rerank; 4) aggregate by file
+    # return top-5 files with scores
+    return {"results": []}
+
+@app.post("/ask")
+def ask(q: Q):
+    # 1) retrieve; 2) build prompt; 3) call LLM; 4) return answer + sources
+    return {"answer": "", "sources": []}
+```
+
+Dockerfile sketch:
+```
+FROM python:3.11-slim
+WORKDIR /app
+COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 8000
+CMD ["uvicorn","app:app","--host","0.0.0.0","--port","8000"]
+```
+
+Notes:
+- Add CORS if you build a web UI.
+- Provide /metrics or simple logs for latency, p95, and error rates.
+- Use environment variables for model names and DB URLs.

@@ -1,4 +1,32 @@
-Vector Stores: Qdrant and pgvector
-Vector databases store and search embeddings. Popular options:
-- Qdrant: optimized for fast similarity search, with filters and payloads.
-- pgvector: PostgreSQL extension for vector search. Good for small/medium projects where SQL integration matters.
+[FILE: 03_vector_stores_qdrant_pgvector.txt]
+TITLE: Vector stores — Qdrant vs Postgres + pgvector
+SUMMARY: Practical tradeoffs between a purpose-built vector DB (Qdrant) and a relational DB with a vector extension (pgvector).
+KEYWORDS: Qdrant, pgvector, HNSW, IVF, payload, filters, upsert, indexing, distance metric, persistence, docker
+
+Qdrant (purpose-built):
+- Index: HNSW (excellent recall/latency), persistent, supports cosine/dot/euclidean.
+- Payload: arbitrary JSON payload with filters (tags, file, headings).
+- API: gRPC/HTTP SDKs; easy Docker deployment.
+- Pros: strong ANN performance, filtering, snapshots.
+- Cons: separate service to run and operate.
+
+Postgres + pgvector:
+- Store vectors in a column; indexes: ivfflat/hnsw (newer), filters via SQL.
+- Pros: one database for everything, ACID, joins with structured data.
+- Cons: ANN performance and operational tuning are trickier; version/extension compatibility matters.
+
+Choosing one:
+- High QPS, need great latency and simple filters → Qdrant.
+- Tight integration with relational data, fewer queries → Postgres + pgvector.
+
+Operational tips:
+- Keep the same distance metric as used during indexing.
+- Batch upserts; avoid per-row round trips.
+- Monitor recall and p95 latency after changing index params (M, efConstruction/efSearch for HNSW).
+
+FAQ:
+Q: Can I filter by file or tag?
+A: Yes. Use payload filters in Qdrant; WHERE clauses in Postgres/pgvector.
+
+Q: How big can my payload be?
+A: Keep chunks small; store large blobs in object storage and reference them in payload.

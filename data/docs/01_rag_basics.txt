@@ -1,4 +1,32 @@
-RAG Basics
-Retrieval-Augmented Generation (RAG) is an approach that combines a retriever (vector database or search engine)
-with a generator (large language model). The retriever provides relevant context from a knowledge base, and the model
-uses it to generate a more accurate and grounded response.
+[FILE: 01_rag_basics.txt]
+TITLE: RAG Basics — Retrieval-Augmented Generation
+SUMMARY: A compact guide to what RAG is, when it helps, and how the pipeline is wired end to end.
+KEYWORDS: RAG, retrieval augmented generation, knowledge grounding, retrieval pipeline, chunking, embeddings, reranking, context window, hallucinations
+
+What is RAG?
+RAG (Retrieval-Augmented Generation) is a pattern where an LLM answers questions using external documents fetched at query time. The model gets grounded context, which reduces hallucinations and lets you update knowledge without retraining.
+
+Core pipeline (high level):
+1) Ingest: split documents into chunks; store {vector, payload(file, title, text)} in a vector DB.
+2) Retrieve: embed the user query; nearest-neighbor search returns top-k chunks.
+3) Rerank (optional but recommended): re-score the top-k chunks with a cross-encoder and keep the best ones.
+4) Compose prompt: system + instructions + user question + selected chunks.
+5) Generate: ask the LLM; optionally cite sources.
+6) Evaluate: track precision/recall@k, MRR, nDCG@k, latency p95, and cost/request.
+
+When to use RAG:
+- Knowledge changes frequently or is private (docs, wikis, tickets).
+- Need source citations and better factuality.
+- Finetuning is too costly or slow.
+
+Chunking tips:
+- 400–800 tokens per chunk; 100–150 overlap.
+- Prefix chunks with file name and title so the retriever can latch onto topical signals.
+- Keep text clean. Strip boilerplate, menus, and footers.
+
+FAQ:
+Q: What problems does RAG solve?
+A: Providing fresh/private knowledge, reducing hallucinations, enabling verifiable answers.
+
+Q: How is RAG different from finetuning?
+A: RAG adds context at runtime; finetuning changes model weights. RAG is cheaper and easier to update.

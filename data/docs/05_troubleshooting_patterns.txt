@@ -1,5 +1,24 @@
-Troubleshooting Patterns
-Typical issues in RAG systems:
-- Poor retrieval quality → check embeddings or chunking strategy.
-- High latency → enable batching, quantization, GPU acceleration.
-- Mismatched context → reranker or hybrid retrieval helps.
+[FILE: 05_troubleshooting_patterns.txt]
+TITLE: Troubleshooting retrieval — common failure patterns
+SUMMARY: Why the retriever “can’t find the right file” and how to fix it quickly.
+KEYWORDS: retrieval failure, chunking, language mismatch, normalization, score threshold, k, query formulation, indexing bugs
+
+Frequent causes:
+1) Language/model mismatch: English-only embeddings on mixed-language data. Use e5-multilingual/gte-multilingual if needed.
+2) Chunking too large or too small: aim 400–800 tokens, overlap 100–150.
+3) Missing signals: file name/title not included in the embedded text; add “[FILE: …] [TITLE: …]” prefix.
+4) Metric mismatch: DOT with unnormalized vectors or COSINE with normalized ones; keep it consistent.
+5) Hard score_threshold: removes correct candidates; increase k to 50 and filter later.
+6) Indexing bugs: not all chunks inserted; verify counts per file and collection size.
+7) Query is too vague: expand with synonyms or add a short hint (metrics/precision/recall).
+8) Wrong aggregation: ranking chunks but evaluating by file; aggregate by file (max or top-3 avg).
+
+Quick checks:
+- Count chunks per file via filter query.
+- Search only within a target file to see best possible scores.
+- Log top-1 score distribution; if typical top-1 < 0.25 on easy queries, re-check model/data.
+
+Rapid fixes:
+- Raise k, drop thresholds, then rerank.
+- Add keywords/FAQs to each doc.
+- Re-embed after changing preprocessing or the model.

@@ -1,7 +1,30 @@
-Rerankers and Evaluation
-Rerankers improve retrieval results by reordering candidates with a stronger model (e.g., cross-encoder).
-Evaluation metrics for RAG include:
-- precision@k
-- nDCG@k
-- recall@k
-- latency (p95)
+[FILE: 04_rerankers_evaluation.txt]
+TITLE: Rerankers and evaluation
+SUMMARY: Add a cross-encoder reranker on top of ANN to boost top-1 accuracy; measure using nDCG, MRR, and Hit@k.
+KEYWORDS: reranking, cross-encoder, ms-marco, bge reranker, nDCG, MRR, Hit@k, evaluation protocol, label set
+
+Why rerank?
+ANN retrieval is fast but approximate and based on bi-encoder similarity. A cross-encoder reranker scores each (query, chunk) pair jointly and fixes many near-miss cases in the top-20.
+
+How to plug in:
+1) Vector search: take top-20…50 chunks (no hard score threshold).
+2) Rerank: score with a cross-encoder (e.g., cross-encoder/ms-marco-MiniLM-L-6-v2 or BAAI/bge-reranker-base-v1.5).
+3) Aggregate by file: keep the best-scoring chunk per file; return top-5 files.
+4) Feed to LLM.
+
+Evaluation protocol:
+- Build a small labeled set: queries → relevant files/chunks.
+- Report: P@1, Hit@5 (or Recall@5), MRR, nDCG@5.
+- Track latency p95 for “vec only” vs “vec + reranker” to understand cost.
+
+nDCG (intuition):
+- Rewards relevant items higher in the list and discounts lower ranks.
+MRR:
+- High if the first relevant item is near the top.
+
+FAQ:
+Q: Isn’t reranking slow?
+A: On top-20 candidates MiniLM-based models are fast enough on CPU, and the quality bump is usually worth it.
+
+Q: Do I still need a good retriever?
+A: Yes. Rerankers can’t rescue items that never appear in the candidate set.

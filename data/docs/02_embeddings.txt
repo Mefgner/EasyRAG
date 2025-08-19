@@ -1,4 +1,30 @@
-Embeddings
-Embeddings are vector representations of text. They capture semantic meaning in a high-dimensional space, allowing
-similar texts to be compared by distance metrics (cosine similarity, dot product, etc.). Embeddings are critical for
-retrieval in RAG systems.
+[FILE: 02_embeddings.txt]
+TITLE: Embeddings — turning text into vectors
+SUMMARY: How text embeddings work, which models to pick, and the gotchas that break retrieval.
+KEYWORDS: embeddings, sentence transformers, e5, gte, cosine similarity, dot product, normalization, multilingual, dimensionality
+
+What are embeddings?
+Embeddings map text to numeric vectors in a semantic space so similar meanings end up close together. Retrieval compares query and chunk vectors to find the nearest neighbors.
+
+Model choices:
+- English: e5-base, gte-base, all-MiniLM-L6-v2 (fast, small).
+- Multilingual: e5-multilingual, gte-multilingual, paraphrase-multilingual-MiniLM-L12-v2.
+- For reranking (not embeddings): cross-encoders like ms-marco-MiniLM-L-6-v2, BAAI/bge-reranker-base-v1.5.
+
+Distance functions:
+- Cosine similarity on L2-normalized vectors.
+- Dot-product with normalized embeddings is effectively cosine.
+Pick one and keep it consistent across indexing and querying.
+
+Best practices:
+- Normalize vectors if you use DOT, or use COSINE with unnormalized vectors, but don’t mix.
+- Include light metadata into the text you embed: “[FILE: name] [TITLE: title] ” + chunk.
+- Use consistent tokenization and the same model for index and query.
+- Re-embed if you change the model or preprocessing.
+
+FAQ:
+Q: Do I need multilingual embeddings?
+A: If queries or docs can be in multiple languages, yes. Otherwise, English-only is a bit faster.
+
+Q: What dimension should I use?
+A: Determined by the model (e.g., 384, 768). Higher dims aren’t always better; retrieval quality depends more on the model family and data.

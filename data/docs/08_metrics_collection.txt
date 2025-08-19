@@ -1,7 +1,26 @@
-Metrics Collection
-Track:
-- precision@k
-- recall@k
-- latency (p95)
-- throughput (requests/sec)
-Store results in a table and visualize with graphs for improvements over time.
+[FILE: 08_metrics_collection.txt]
+TITLE: RAG evaluation metrics — what to track and how
+SUMMARY: Practical metrics for retrieval and end-to-end latency; includes quick formulas.
+KEYWORDS: evaluation metrics, precision@k, recall@k, Hit@k, MRR, nDCG@k, latency p95, throughput, cost per query
+
+Retrieval metrics:
+- Precision@k = relevant_in_top_k / k.
+- Recall@k (Hit@k for single relevant) = relevant_in_top_k / total_relevant.
+- MRR = 1 / rank_of_first_relevant.
+- nDCG@k: position-weighted relevance; rewards ranking relevant items higher.
+
+Latency & cost:
+- Latency p50/p95/p99: median/95th/99th percentile end-to-end time.
+- First-token latency: time to first streamed token for LLMs.
+- Throughput: requests per second (or per minute) under load.
+- Cost per query: tokens in + tokens out × price (or local GPU-hours).
+
+Evaluation recipe:
+1) Create 5–20 labeled queries mapping to relevant files/chunks.
+2) Run “vec only” and “vec + reranker” variants.
+3) Report P@1, Hit@5, MRR, nDCG@5, latency p95 (and throughput under small load).
+4) Track weekly to reveal regressions.
+
+FAQ:
+Q: Which single number should I watch?
+A: P@1 or MRR for quality, p95 for latency. Keep a small dashboard.

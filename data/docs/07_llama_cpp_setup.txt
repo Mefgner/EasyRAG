@@ -1,6 +1,27 @@
-Llama.cpp Setup
-1. Clone the llama.cpp repository.
-2. Build with CMake.
-3. Run a quantized 3B or 7B model locally.
-4. Test inference speed and GPU offloading.
-5. Expose via server or bindings for integration with RAG.
+[FILE: 07_llama_cpp_setup.txt]
+TITLE: Llama.cpp quick setup (CLI and server)
+SUMMARY: How to run a small local model, offload to GPU, and query it from your app.
+KEYWORDS: llama.cpp, CUDA, OpenCL, gguf, kv cache, context length, -ngl, server, sampling, flash attention
+
+Model & build:
+- Get a GGUF model (e.g., 3B–7B) compatible with llama.cpp.
+- Build with CUDA on NVIDIA or use prebuilt binaries; Windows via CMake + Visual Studio or use releases.
+
+CLI basics:
+- ./main -m model.gguf -p "Hello" -ngl 40 -c 4096 --temp 0.7
+- -ngl N: number of layers offloaded to GPU; higher is faster if VRAM allows.
+- -c: context length; larger increases memory use.
+
+Server mode:
+- ./server -m model.gguf -ngl 40 -c 4096 --host 0.0.0.0 --port 8080
+- Open http://localhost:8080 for a simple UI.
+- HTTP API: /completion, /chat/completions; stream tokens with SSE.
+
+Performance tips:
+- Enable flash attention where available; tune batch size.
+- Warm up the model; pin the process to a performance profile.
+- Compare CLI vs server; server adds overhead but enables multi-client access.
+
+Integration:
+- llama-cpp-python for local bindings, or call the HTTP server from your app.
+- Log tps (tokens/sec), first-token latency, and p95 for end-to-end requests.

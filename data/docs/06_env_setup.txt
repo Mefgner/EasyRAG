@@ -1,5 +1,29 @@
-Environment Setup
-1. Install Python 3.11+ and create a virtual environment (venv).
-2. Install dependencies via requirements.txt.
-3. Use Docker Compose to spin up Qdrant or Postgres+pgvector.
-4. Test local LLM integration (e.g., llama.cpp).
+[FILE: 06_env_setup.txt]
+TITLE: Environment setup
+SUMMARY: Minimal, reproducible setup for a local RAG playground.
+KEYWORDS: Python 3.11, venv, Docker, Qdrant, Postgres, sentence-transformers, FastAPI, Windows, WSL2
+
+Steps:
+1) Python & venv
+   - Install Python 3.11+.
+   - python -m venv .venv && source .venv/bin/activate (Windows: .venv\Scripts\activate)
+   - pip install --upgrade pip
+
+2) Dependencies
+   - pip install qdrant-client sentence-transformers fastapi uvicorn pydantic[dotenv]
+
+3) Vector DB (choose one)
+   - Qdrant: docker run -p 6333:6333 -v qdrant_storage:/qdrant/storage qdrant/qdrant
+   - Postgres + pgvector: use docker-compose; create extension and a table with a vector column.
+
+4) Config
+   - .env for URLs and model names.
+   - Verify collection exists and metrics match (COSINE vs DOT).
+
+5) Sanity test
+   - Index 10 docs; query 5–10 test questions.
+   - Log p50/p95 latency and Hit@5.
+
+Windows notes:
+- Prefer WSL2 for Docker/NVIDIA. On native Windows, ensure firewall allows local ports.
+- For GPU inference with local LLMs use llama.cpp builds with CUDA or CLBlast as available.

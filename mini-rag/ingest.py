@@ -14,6 +14,14 @@ QDRANT_COLLECTION = "mini-rag"
 DOCS_DIR = Path("./data/docs")
 qdc = QdrantClient(url=QDRANT_URL)
 
+TEST_MODE = True
+
+if TEST_MODE:
+    try:
+        qdc.delete_collection(QDRANT_COLLECTION)
+    finally:
+        pass
+
 if not qdc.collection_exists(QDRANT_COLLECTION):
     qdc.create_collection(
         collection_name=QDRANT_COLLECTION,
@@ -26,15 +34,20 @@ if not qdc.collection_exists(QDRANT_COLLECTION):
 
 # TODO:
     # - make better chunking with overlapping
-    # - add chunk id or chunk order when working with big documents/paragraphs
+    # - add chunk id or chunk order when working with big documents/contents
     # - add metadata like lang
-def add_embedding(text: str, file_name: str):
+def add_embedding(text: str, file_name: str, chunk_order: int = -1):
     vector = tools.embed(text)
+    
+    payload: dict[str, int | str] = {"text": text, "file": file_name}
+    
+    if chunk_order >= 0:
+        payload.update({"order": chunk_order})
     
     point = PointStruct(
         id=str(uuid.uuid4()),
         vector=vector,
-        payload={"text": text, "file": file_name}
+        payload=payload
     )
     
     qdc.upsert(
@@ -45,14 +58,23 @@ def add_embedding(text: str, file_name: str):
 
 for file_path in DOCS_DIR.glob("*.txt"):
     with open(file_path, "r", encoding="utf-8") as file:
-        for paragraph in file.read().split("\n\n"):
-            if len(paragraph.strip()) < 10:
-                continue
+        content = file.read().strip()
+        
+        if len(content.strip()) > 1000:
+            sentences = content.split(". ")
             
-            elif len(paragraph.strip()) > 1000:
-                for chunk in [paragraph[i:i + 1000] for i in range(0, len(paragraph), 1000)]:
-                    if chunk.strip():
-                        add_embedding(chunk, str(file_path.name))
+            chunk = ""
+            i = 0
+            while sentences:
+                chunk += sentences.pop(0) + ". "
+                
+                if len(chunk) >= 750:
+                    add_embedding(chunk, str(file_path.name), i)
+                    chunk = ""
+                    i += 1
+                    
+            if chunk:
+                add_embedding(chunk, str(file_path.name), i)
 
-            else:
-                add_embedding(paragraph, str(file_path.name))
+        else:
+            add_embedding(content, str(file_path.name))
