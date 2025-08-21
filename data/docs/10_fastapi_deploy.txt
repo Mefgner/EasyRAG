@@ -1,4 +1,3 @@
-[FILE: 10_fastapi_deploy.txt]
 TITLE: FastAPI deployment — minimal API for RAG
 SUMMARY: A tiny FastAPI wrapper exposing /retrieve and /ask; plus a Dockerfile sketch.
 KEYWORDS: FastAPI, Uvicorn, Docker, healthcheck, retrieve endpoint, ask endpoint, CORS

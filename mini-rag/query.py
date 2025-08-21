@@ -15,14 +15,14 @@ def query(text: str):
     response = qdc.query_points(
         collection_name=QDRANT_COLLECTION,
         query=query_vector,
-        limit=5,
+        limit=3,
     )
 
     dict_response = response.model_dump()
     points = dict_response["points"]
     
     if not points:
-        return {}
+        return {}, {}
     
     # print("similarity scores: ")
     # print([(point["score"], point["payload"]['file']) for point in points])

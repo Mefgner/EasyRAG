@@ -1,4 +1,3 @@
-[FILE: 08_metrics_collection.txt]
 TITLE: RAG evaluation metrics — what to track and how
 SUMMARY: Practical metrics for retrieval and end-to-end latency; includes quick formulas.
 KEYWORDS: evaluation metrics, precision@k, recall@k, Hit@k, MRR, nDCG@k, latency p95, throughput, cost per query

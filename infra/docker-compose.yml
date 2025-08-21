@@ -7,11 +7,16 @@ services:
       - QDRANT__STORAGE__USE_MMAP=false
 
   llama:
-    image: "ghcr.io/ggerganov/llama.cpp:server"
+    image: "ghcr.io/ggml-org/llama.cpp:server-cuda"
     command: >
       --model /models/Qwen3-4B-it.gguf
-      --port 8080
+      --no-webui
       --n-gpu-layers 40
+      --flash-attn
+      --batch-size 1024
+      --cache-type-k q8_0
+      --cache-type-v q8_0
+      --parallel 2
     ports: ["8080:8080"]
     volumes: ["./models:/models"]
     deploy:

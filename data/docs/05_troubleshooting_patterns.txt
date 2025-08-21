@@ -1,4 +1,3 @@
-[FILE: 05_troubleshooting_patterns.txt]
 TITLE: Troubleshooting retrieval — common failure patterns
 SUMMARY: Why the retriever “can’t find the right file” and how to fix it quickly.
 KEYWORDS: retrieval failure, chunking, language mismatch, normalization, score threshold, k, query formulation, indexing bugs

@@ -1,4 +1,3 @@
-[FILE: 07_llama_cpp_setup.txt]
 TITLE: Llama.cpp quick setup (CLI and server)
 SUMMARY: How to run a small local model, offload to GPU, and query it from your app.
 KEYWORDS: llama.cpp, CUDA, OpenCL, gguf, kv cache, context length, -ngl, server, sampling, flash attention

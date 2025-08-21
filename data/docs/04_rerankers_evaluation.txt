@@ -1,4 +1,3 @@
-[FILE: 04_rerankers_evaluation.txt]
 TITLE: Rerankers and evaluation
 SUMMARY: Add a cross-encoder reranker on top of ANN to boost top-1 accuracy; measure using nDCG, MRR, and Hit@k.
 KEYWORDS: reranking, cross-encoder, ms-marco, bge reranker, nDCG, MRR, Hit@k, evaluation protocol, label set

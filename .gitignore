@@ -3,8 +3,6 @@
 infra/*_data/*
 infra/*_storage/*
 infra/models/*
-.env.*
-.env.local
 .venv*/
 
 # Byte-compiled / optimized / DLL files

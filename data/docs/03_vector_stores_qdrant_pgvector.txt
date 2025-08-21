@@ -1,4 +1,3 @@
-[FILE: 03_vector_stores_qdrant_pgvector.txt]
 TITLE: Vector stores — Qdrant vs Postgres + pgvector
 SUMMARY: Practical tradeoffs between a purpose-built vector DB (Qdrant) and a relational DB with a vector extension (pgvector).
 KEYWORDS: Qdrant, pgvector, HNSW, IVF, payload, filters, upsert, indexing, distance metric, persistence, docker
